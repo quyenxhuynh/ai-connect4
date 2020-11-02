@@ -6,6 +6,7 @@ class ConnectFour:
         self.COLS = cols
         self.PLAYERS = 2
         self.TO_WIN = to_win
+        self.winner = None
         self.reset()
         # self.test()
 
@@ -91,6 +92,7 @@ class ConnectFour:
                 break
             c += 1
             if c == self.TO_WIN:
+                self.winner = player
                 return True
 
         # horizontal
@@ -99,6 +101,7 @@ class ConnectFour:
             if self.board[row][i] == player:
                 c += 1
                 if c == self.TO_WIN:
+                    self.winner = player
                     return True
             else:
                 c = 0
@@ -114,6 +117,7 @@ class ConnectFour:
                     c += 1
                     print("Count", c, row, col)
                     if c == self.TO_WIN:
+                        self.winner = player
                         return True
                 else:
                     c = 0
@@ -124,6 +128,7 @@ class ConnectFour:
                 if self.board[row][col] == player:
                     c += 1
                     if c == self.TO_WIN:
+                        self.winner = player
                         return True
                     else:
                         c = 0
