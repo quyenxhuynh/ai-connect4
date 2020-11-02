@@ -4,7 +4,7 @@ import game
 pygame.init()
 clock = pygame.time.Clock()
 
-game = game.ConnectFour(1,7)
+game = game.ConnectFour()
 
 window = pygame.display.set_mode((game.COLS * 100, (game.ROWS + 1) * 100))
 
