@@ -156,4 +156,4 @@ game.make_board(
     ]
 )
 
-print(game)
+# print(game)
