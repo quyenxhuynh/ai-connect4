@@ -182,4 +182,6 @@ dmypy.json
 # End of https://www.toptal.com/developers/gitignore/api/vscode,macos,python
 
 test2.py
+test3.py
+test4.py
 tempCodeRunnerFile.py

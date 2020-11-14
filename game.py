@@ -13,6 +13,7 @@ class ConnectFour:
     def reset(self):
         self.board = [[None for i in range(self.COLS)] for j in range(self.ROWS)] 
         self.turn = 0
+        self.winner = None
         # print(self.board) 
     
     def make_board(self, board):
@@ -32,9 +33,9 @@ class ConnectFour:
         row = self.next_valid(col)
         if row is not None:
             self.board[row][col] = self.turn
+            # print(self)
             if (self.is_win(col, row, self.turn)):
                 print(f'Player {self.turn} won!')
-                self.reset()
                 return
             else: 
                 self.turn = (self.turn + 1) % self.PLAYERS
@@ -115,7 +116,7 @@ class ConnectFour:
                 # print(row, col)
                 if self.board[row][col] == player:
                     c += 1
-                    print("Count", c, row, col)
+                    # print("Count", c, row, col)
                     if c == self.TO_WIN:
                         self.winner = player
                         return True
@@ -136,7 +137,7 @@ class ConnectFour:
 
     def next_valid(self, col):
         if self.board[0][col] is None:
-            for row in range(self.ROWS-1, 0, -1):
+            for row in range(self.ROWS-1, -1, -1):
                 if self.board[row][col] is None:
                     return row
         return None
