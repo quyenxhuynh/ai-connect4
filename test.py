@@ -58,6 +58,7 @@ def two_players():
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            global running
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             
@@ -92,6 +93,7 @@ def intro_screen():
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            global running
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -124,6 +126,7 @@ def end_screen():
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            global running
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:

@@ -29,12 +29,15 @@ class ConnectFour:
         ]
         print(self.board)
 
+    def ai_make_move(self):
+        return None
+
     def make_move(self, col):
         row = self.next_valid(col)
         if row is not None:
             self.board[row][col] = self.turn
             # print(self)
-            if (self.is_win(col, row, self.turn)):
+            if self.is_win(col, row, self.turn):
                 print(f'Player {self.turn} won!')
                 return
             else: 
@@ -151,15 +154,15 @@ class ConnectFour:
         return s
 
 
-game = ConnectFour()
-game.make_board(
-    [
-        [None,None,None,None,1,None], 
-        [None,None,None,1,None,None], 
-        [None,None,1,None,None,None], 
-        [None,1,None,None,None,None], 
-        [1,None,None,None,None,None]
-    ]
-)
+# game = ConnectFour()
+# game.make_board(
+#     [
+#         [None,None,None,None,1,None],
+#         [None,None,None,1,None,None],
+#         [None,None,1,None,None,None],
+#         [None,1,None,None,None,None],
+#         [1,None,None,None,None,None]
+#     ]
+# )
 
 # print(game)
