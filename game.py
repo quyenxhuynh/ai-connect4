@@ -7,6 +7,7 @@ class ConnectFour:
         self.PLAYERS = 2
         self.TO_WIN = to_win
         self.winner = None
+        self.board = None
         self.reset()
         # self.test()
 
@@ -49,47 +50,6 @@ class ConnectFour:
         return self.board[col][row]
 
     def is_win(self, col, row, player):
-
-        # N = len(self.board)
-        # initial_val = [0]*N
-        # rows = {
-        #
-        #     'Blue': initial_val,
-        #     'Red': initial_val
-        # }
-        #
-        # cols = {
-        #     'Blue': initial_val,
-        #     'Red': initial_val
-        # }
-        #
-        # pos_diag = {
-        #     'Blue': 0,
-        #     'Red': 0
-        # }
-        #
-        # neg_diag = {
-        #     'Blue': 0,
-        #     'Red': 0
-        # }
-        #
-        # if row == col:
-        #     pos_diag[player] += 1
-        #     if pos_diag[player] == N:
-        #         return player
-        #
-        # if row == N - col:
-        #     neg_diag[player] += 1
-        #     if neg_diag[player] == N:
-        #         return [player]
-        #
-        # rows[player][row] += 1
-        # cols[player][col] += 1
-        #
-        # if rows[player][row] or cols[player][col] == N:
-        #     return player
-
-        # vertical
         c = 0
         for i in range(row, min(self.ROWS, row + self.TO_WIN)):
             if self.board[i][col] != player:
@@ -136,7 +96,16 @@ class ConnectFour:
                         return True
                     else:
                         c = 0
+        if self.is_tie():
+            self.winner = 2
+            return True
 
+    def is_tie(self):
+        for i in range(self.ROWS):
+            for j in range(self.COLS):
+                if self.board[i][j] is None:
+                    return False
+        return True
 
     def next_valid(self, col):
         if self.board[0][col] is None:
