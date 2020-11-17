@@ -91,6 +91,7 @@ def two_players():
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            global running
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             
@@ -120,6 +121,7 @@ def intro_screen():
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            global running
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -168,7 +170,7 @@ def end_screen():
     screen.fill(WHITE)
     font = pygame.font.Font(None, 70)
     result = game.winner
-    if result is None: 
+    if result == 2:
         text = font.render("It was a tie.", True, BLACK)
     else:
         if game.winner == 0:
@@ -186,6 +188,7 @@ def end_screen():
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            global running
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
