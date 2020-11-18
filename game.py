@@ -65,6 +65,33 @@ class ConnectFour:
             else:
                 c = 0
 
+        # # diagonal /  TODO: TEST
+        # c = 0
+        # for row in range(max(0, row - self.TO_WIN), min(self.ROWS-1, row + self.TO_WIN)):
+        #     for col in range(min(self.COLS-1, col + self.TO_WIN), max(0, col - self.TO_WIN), -1):
+        #         # print(max(0, row - self.TO_WIN), min(self.ROWS, row + self.TO_WIN))
+        #         # print(min(self.COLS, col + self.TO_WIN), max(0, col - self.TO_WIN), -1)
+        #         # print(row, col)
+        #         if self.board[row][col] == player:
+        #             c += 1
+        #             # print("Count", c, row, col)
+        #             if c == self.TO_WIN:
+        #                 self.winner = player
+        #                 return True
+        #         else:
+        #             c = 0
+
+        # # diagonal \  TODO: TEST
+        # for row in range(min(0, row - self.TO_WIN), min(self.ROWS-1, row + self.TO_WIN)):
+        #     for col in range(min(0, col - self.TO_WIN), min(self.COLS-1, col + self.TO_WIN), -1):
+        #         if self.board[row][col] == player:
+        #             c += 1
+        #             if c == self.TO_WIN:
+        #                 self.winner = player
+        #                 return True
+        #             else:
+        #                 c = 0
+        
         # positive diagonal
         for col in range(self.COLS - (self.TO_WIN - 1)):
             for row in range(self.ROWS - (self.TO_WIN - 1)):
