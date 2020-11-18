@@ -46,39 +46,6 @@ def draw_board():
             else:
                 pygame.draw.circle(screen, BLACK, circle_pos, CIRC)
 
-def easy():
-    global game_mode
-    from random import randint
-
-    if game.winner is not None:
-        game_mode = "end"
-    
-    screen.fill(WHITE)
-    draw_board()
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        
-        if game.turn == 1:
-            pygame.time.delay(500)
-            col = randint(0,game.COLS-1)
-            row = game.make_move(col)
-
-            if row: 
-                draw_board()
-                pygame.display.update()
-
-        else: 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-            
-                col = (event.pos[0] - 40) // SQ  # 40 to account for the white gap between screen.left and board.left
-                row = game.make_move(col)
-                
-                if row:
-                    draw_board()
-                    pygame.display.update()
-
 
 def two_players():
     global game_mode
@@ -94,13 +61,17 @@ def two_players():
             global running
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            
             col = (event.pos[0] - 40) // SQ  # 40 to account for the white gap between screen.left and board.left
             row = game.make_move(col)
-            
+            turn = game.turn
+            pygame.draw.circle(screen, RED, (500,500), CIRC)
+            pygame.display.update()
+            # print(game_mode, game.winner)
             if row:
                 draw_board()
-                pygame.display.update()
+        
+
+
 
 def intro_screen(): 
     global game_mode
@@ -126,44 +97,10 @@ def intro_screen():
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if one_player_rect.collidepoint(event.pos):
-                game_mode = "levels"
+                print('player 1')  # change to AI gameplay
             elif two_player_rect.collidepoint(event.pos):
                 game_mode = 'two_player'
                 draw_board()
-
-
-def levels(): 
-    global game_mode
-    screen.fill(WHITE)
-    font = pygame.font.Font(None, 70)
-    text = font.render("Choose a Level", True, BLACK)
-    text_rect = text.get_rect(center=(SCREEN_WIDTH/2, 2*SCREEN_HEIGHT/5))
-    screen.blit(text, text_rect)
-
-    font = pygame.font.Font(None, 40)
-    easy = font.render("Easy", True, BLACK)
-    easy_rect = easy.get_rect(center=(SCREEN_WIDTH/2, 300))
-    screen.blit(easy, easy_rect)
-
-    med = font.render("Medium", True, BLACK)
-    med_rect = med.get_rect(center=(SCREEN_WIDTH/2, 350))
-    screen.blit(med, med_rect)
-
-    hard = font.render("Hard", True, BLACK)
-    hard_rect = hard.get_rect(center=(SCREEN_WIDTH/2, 400))
-    screen.blit(hard, hard_rect)
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if easy_rect.collidepoint(event.pos):
-                game_mode = "easy"
-            elif med_rect.collidepoint(event.pos):
-                print('medium')
-            elif hard_rect.collidepoint(event.pos):
-                print('hard')
 
 def end_screen():
     global game_mode
@@ -194,19 +131,18 @@ def end_screen():
         if event.type == pygame.MOUSEBUTTONDOWN:
             if pa_rect.collidepoint(event.pos):
                 game.reset()
+                # print('hi')
                 game_mode = "intro"
 
 while running:
+    # print(game_mode)
     if game_mode == "intro":
         intro_screen()
-    elif game_mode == "levels":
-        levels()
-    elif game_mode == "easy":
-        easy()
     elif game_mode == "two_player":
         two_players()
     elif game_mode == "end":
         end_screen()
+        
         
     pygame.display.flip()
 
