@@ -1,5 +1,5 @@
 class ConnectFour:
-    
+
     def __init__(self, rows=5, cols=6, to_win=4):
         self.turn = 0
         self.ROWS = rows
@@ -12,14 +12,13 @@ class ConnectFour:
         # self.test()
 
     def reset(self):
-        self.board = [[None for i in range(self.COLS)] for j in range(self.ROWS)] 
+        self.board = [[None for i in range(self.COLS)] for j in range(self.ROWS)]
         self.turn = 0
         self.winner = None
-        # print(self.board) 
-    
+        # print(self.board)
+
     def make_board(self, board):
         self.board = board
-    
 
     def ai_make_move(self):
         return None
@@ -35,7 +34,7 @@ class ConnectFour:
             elif self.is_win(col, row, self.turn):
                 print(f'Player {self.turn + 1} won!')
                 return
-            else: 
+            else:
                 self.turn = (self.turn + 1) % self.PLAYERS
                 return row
         return None
@@ -44,7 +43,7 @@ class ConnectFour:
         return self.board[col][row]
 
     def is_win(self, col, row, player):
-        #vertical
+        # vertical
         c = 0
         for i in range(row, min(self.ROWS, row + self.TO_WIN)):
             if self.board[i][col] != player:
@@ -56,7 +55,7 @@ class ConnectFour:
 
         # horizontal
         c = 0
-        for i in range(min(0, col-self.TO_WIN), min(col+self.TO_WIN, self.COLS)):
+        for i in range(min(0, col - self.TO_WIN), min(col + self.TO_WIN, self.COLS)):
             if self.board[row][i] == player:
                 c += 1
                 if c == self.TO_WIN:
@@ -91,7 +90,7 @@ class ConnectFour:
         #                 return True
         #             else:
         #                 c = 0
-        
+
         # positive diagonal
         for col in range(self.COLS - (self.TO_WIN - 1)):
             for row in range(self.ROWS - (self.TO_WIN - 1)):
@@ -109,7 +108,7 @@ class ConnectFour:
                     return True
                 else:
                     c = 0
-    
+
         if self.is_tie():
             self.winner = 2
             return True
@@ -121,13 +120,19 @@ class ConnectFour:
                     return False
         return True
 
+    def is_valid(self, col):
+        for row in range(self.ROWS):
+            if self.board[row][col] is None:
+                return True
+        return False
+
     def next_valid(self, col):
         if self.board[0][col] is None:
-            for row in range(self.ROWS-1, -1, -1):
+            for row in range(self.ROWS - 1, -1, -1):
                 if self.board[row][col] is None:
                     return row
         return None
-    
+
     def __str__(self):
         s = ""
         for row in range(self.ROWS):
@@ -135,7 +140,6 @@ class ConnectFour:
                 s += (str(self.board[row][col]) + " ")
             s += "\n"
         return s
-
 
 # game = ConnectFour()
 # game.make_board(
