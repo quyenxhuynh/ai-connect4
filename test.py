@@ -72,8 +72,6 @@ def two_players():
                     draw_board()
         
 
-
-
 def intro_screen(): 
     global game_mode
     screen.fill(WHITE)
