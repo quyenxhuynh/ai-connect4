@@ -17,7 +17,7 @@ class GameState:
                 if self.board[row][col] == player:
                     c += 1
                     if c == self.TO_WIN:
-                        self.winner = player
+                        # self.winner = player
                         return True
                 else:
                     c = 0
@@ -29,7 +29,7 @@ class GameState:
                 if self.board[row][col] == player:
                     c += 1
                     if c == self.TO_WIN:
-                        self.winner = player
+                        # self.winner = player
                         return True
                 else:
                     c = 0
@@ -198,3 +198,59 @@ def min_value(game_state, num_moves, max_depth):
             cur_min = new_min
             move = successor
     return [move, cur_min]
+
+
+def expectimax(game):
+    game_state = GameState(game)
+    result = e_max_value(game_state, 0, 4)
+    print(result)
+    return result[0]
+
+
+def e_max_value(game_state, num_moves, max_depth):
+    if game_state.is_win(1):
+        return [None, 100]  # computer wins
+    elif game_state.is_win(0):
+        return [None, -100]  # player wins
+    elif game_state.is_tie():
+        return [None, 0]  # not sure what score for tie should be
+    elif num_moves > max_depth:
+        return [None, game_state.get_score()]
+    cur_max = -999999999
+    move = None
+    # print(game_state.board)
+    # print(game_state.get_successors())
+    for successor in game_state.get_successors():
+        row = successor[0]
+        col = successor[1]
+        new_game_state = GameState(game_state)
+        new_game_state.board[row][col] = 1  # computer move
+        new_max = e_min_value(new_game_state, num_moves + 1, max_depth)[1]
+        if new_max >= cur_max:
+            cur_max = new_max
+            move = successor
+    return [move, cur_max]
+
+
+def e_min_value(game_state, num_moves, max_depth):
+    if game_state.is_win(1):
+        return [None, 100]  # computer wins
+    elif game_state.is_win(0):
+        return [None, -100]  # player wins
+    elif game_state.is_tie():
+        return [None, 0]  # not sure what score for tie should be
+    elif num_moves > max_depth:
+        return [None, game_state.get_score()]
+
+    move = None
+    total_value = 0
+    successors = game_state.get_successors()
+    for successor in successors:
+        row = successor[0]
+        col = successor[1]
+        new_game_state = GameState(game_state)
+        new_game_state.board[row][col] = 0  # player move
+        value = max_value(new_game_state, num_moves + 1, max_depth)[1]
+        total_value += value
+    final_value = total_value/len(successors)
+    return [move, final_value]

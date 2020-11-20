@@ -81,6 +81,40 @@ def easy():
                     draw_board()
                     pygame.display.update()
 
+def medium():
+    global game_mode
+    global running
+    if game.winner is not None:
+        game_mode = "end"
+
+    screen.fill(WHITE)
+    draw_board()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+
+            col = (event.pos[0] - 40) // SQ  # 40 to account for the white gap between screen.left and board.left
+            row = game.make_move(col)
+
+            if row:
+                draw_board()
+                pygame.display.update()
+
+    if game.winner is not None:
+        game_mode = "end"
+        running = False
+        print(game)
+    elif game.turn == 1:
+        game_state = ai_algorithms.GameState(game)
+        row = game.make_move(ai_algorithms.expectimax(game_state)[1])
+        if row:
+            draw_board()
+            pygame.display.update()
+
+
+
 def hard():
     global game_mode
     global running
@@ -105,8 +139,7 @@ def hard():
     if game.winner is not None:
         game_mode = "end"
         running = False
-        for row in game.board:
-            print(row)
+        print(game)
     elif game.turn == 1:
         game_state = ai_algorithms.GameState(game)
         row = game.make_move(ai_algorithms.minimax(game_state)[1])
@@ -197,6 +230,7 @@ def levels():
                 game_mode = "easy"
             elif med_rect.collidepoint(event.pos):
                 print('medium')
+                game_mode = 'medium'
             elif hard_rect.collidepoint(event.pos):
                 print('hard')
                 game_mode = "hard"
@@ -240,6 +274,8 @@ while running:
         levels()
     elif game_mode == "easy":
         easy()
+    elif game_mode == "medium":
+        medium()
     elif game_mode == "hard":
         hard()
     elif game_mode == "two_player":
