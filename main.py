@@ -1,6 +1,7 @@
 import pygame
 import pygame.freetype 
 import connect4 as game
+import ai_algorithms
 
 # SCREEN
 SCREEN_WIDTH = 800
@@ -49,6 +50,7 @@ def draw_board():
 def easy():
     global game_mode
     from random import randint
+    global running
 
     if game.winner is not None:
         game_mode = "end"
@@ -78,6 +80,39 @@ def easy():
                 if row:
                     draw_board()
                     pygame.display.update()
+
+def hard():
+    global game_mode
+    global running
+    if game.winner is not None:
+        game_mode = "end"
+
+    screen.fill(WHITE)
+    draw_board()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+
+            col = (event.pos[0] - 40) // SQ  # 40 to account for the white gap between screen.left and board.left
+            row = game.make_move(col)
+
+            if row:
+                draw_board()
+                pygame.display.update()
+
+    if game.winner is not None:
+        game_mode = "end"
+        running = False
+        for row in game.board:
+            print(row)
+    elif game.turn == 1:
+        game_state = ai_algorithms.GameState(game)
+        row = game.make_move(ai_algorithms.minimax(game_state)[1])
+        if row:
+            draw_board()
+            pygame.display.update()
 
 
 def two_players():
@@ -133,6 +168,7 @@ def intro_screen():
 
 def levels(): 
     global game_mode
+    global running
     screen.fill(WHITE)
     font = pygame.font.Font(None, 70)
     text = font.render("Choose a Level", True, BLACK)
@@ -163,6 +199,7 @@ def levels():
                 print('medium')
             elif hard_rect.collidepoint(event.pos):
                 print('hard')
+                game_mode = "hard"
 
 def end_screen():
     global game_mode
@@ -203,6 +240,8 @@ while running:
         levels()
     elif game_mode == "easy":
         easy()
+    elif game_mode == "hard":
+        hard()
     elif game_mode == "two_player":
         two_players()
     elif game_mode == "end":
