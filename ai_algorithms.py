@@ -132,5 +132,3 @@ import game
 testgame = game.ConnectFour()
 gamestate = GameState(testgame)
 print(minimax(gamestate))
-
-

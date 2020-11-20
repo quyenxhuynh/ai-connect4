@@ -1,6 +1,6 @@
 import pygame
 import pygame.freetype 
-import game
+import connect4 as game
 
 # SCREEN
 SCREEN_WIDTH = 800
@@ -82,25 +82,24 @@ def easy():
 
 def two_players():
     global game_mode
-
     if game.winner is not None:
         game_mode = "end"
-
     screen.fill(WHITE)
     draw_board()
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             global running
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            
-            col = (event.pos[0] - 40) // SQ  # 40 to account for the white gap between screen.left and board.left
-            row = game.make_move(col)
-            
-            if row:
-                draw_board()
+            if event.button == 1:
+                col = (event.pos[0] - 40) // SQ  # 40 to account for the white gap between screen.left and board.left
+                row = game.make_move(col)
+                turn = game.turn
+                pygame.draw.circle(screen, RED, (500,500), CIRC)
                 pygame.display.update()
+                # print(game_mode, game.winner)
+                if row:
+                    draw_board()
 
 def intro_screen(): 
     global game_mode
@@ -125,12 +124,12 @@ def intro_screen():
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if one_player_rect.collidepoint(event.pos):
-                game_mode = "levels"
-            elif two_player_rect.collidepoint(event.pos):
-                game_mode = 'two_player'
-                draw_board()
-
+            if event.button == 1:
+                if one_player_rect.collidepoint(event.pos):
+                    game_mode = 'levels'
+                elif two_player_rect.collidepoint(event.pos):
+                    game_mode = 'two_player'
+                    draw_board()
 
 def levels(): 
     global game_mode
@@ -175,9 +174,10 @@ def end_screen():
     else:
         if game.winner == 0:
             win = "Red"
-        else: 
+        elif game.winner == 1: 
             win = "Yellow"
         text = font.render(win + " won!", True, BLACK)
+
     text_rect = text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
     screen.blit(text, text_rect)
 
@@ -190,11 +190,11 @@ def end_screen():
         if event.type == pygame.QUIT:
             global running
             running = False
-
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if pa_rect.collidepoint(event.pos):
-                game.reset()
-                game_mode = "intro"
+            if event.button == 1:
+                if pa_rect.collidepoint(event.pos):
+                    game.reset()
+                    game_mode = "intro"
 
 while running:
     if game_mode == "intro":
