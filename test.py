@@ -1,6 +1,7 @@
 import pygame
 import pygame.freetype 
 import game
+import ai_algorithms
 
 # SCREEN
 SCREEN_WIDTH = 800
@@ -58,6 +59,7 @@ def easy():
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            global running
             running = False
         
         if game.turn == 1:
@@ -79,6 +81,40 @@ def easy():
                     draw_board()
                     pygame.display.update()
 
+def hard():
+    global game_mode
+
+    if game.winner is not None:
+        game_mode = "end"
+
+    screen.fill(WHITE)
+    draw_board()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            global running
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+
+            col = (event.pos[0] - 40) // SQ  # 40 to account for the white gap between screen.left and board.left
+            row = game.make_move(col)
+
+            if row:
+                draw_board()
+                pygame.display.update()
+
+    if game.winner is not None:
+        game_mode = "end"
+        running = False
+        return
+
+    if game.turn == 1:
+        game_state = ai_algorithms.GameState(game)
+        row = game.make_move(ai_algorithms.minimax(game_state)[1])
+        if row:
+            draw_board()
+            pygame.display.update()
+
 
 def two_players():
     global game_mode
@@ -94,13 +130,16 @@ def two_players():
             global running
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            
-            col = (event.pos[0] - 40) // SQ  # 40 to account for the white gap between screen.left and board.left
-            row = game.make_move(col)
-            
-            if row:
-                draw_board()
+            if event.button == 1:
+                col = (event.pos[0] - 40) // SQ  # 40 to account for the white gap between screen.left and board.left
+                row = game.make_move(col)
+                turn = game.turn
+                pygame.draw.circle(screen, RED, (500, 500), CIRC)
                 pygame.display.update()
+                # print(game_mode, game.winner)
+                if row:
+                    draw_board()
+
 
 def intro_screen(): 
     global game_mode
@@ -125,11 +164,12 @@ def intro_screen():
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if one_player_rect.collidepoint(event.pos):
-                game_mode = "levels"
-            elif two_player_rect.collidepoint(event.pos):
-                game_mode = 'two_player'
-                draw_board()
+            if event.button == 1:
+                if one_player_rect.collidepoint(event.pos):
+                    game_mode = "levels"  # change to AI gameplay
+                elif two_player_rect.collidepoint(event.pos):
+                    game_mode = 'two_player'
+                    draw_board()
 
 
 def levels(): 
@@ -155,6 +195,7 @@ def levels():
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            global running
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -163,6 +204,7 @@ def levels():
             elif med_rect.collidepoint(event.pos):
                 print('medium')
             elif hard_rect.collidepoint(event.pos):
+                game_mode = "hard"
                 print('hard')
 
 def end_screen():
@@ -192,9 +234,11 @@ def end_screen():
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if pa_rect.collidepoint(event.pos):
-                game.reset()
-                game_mode = "intro"
+            if event.button == 1:
+                if pa_rect.collidepoint(event.pos):
+                    game.reset()
+                    print('hi')
+                    game_mode = "intro"
 
 while running:
     if game_mode == "intro":
@@ -203,9 +247,11 @@ while running:
         levels()
     elif game_mode == "easy":
         easy()
+    elif game_mode == "hard":
+        hard()
     elif game_mode == "two_player":
         two_players()
-    elif game_mode == "end":
+    if game_mode == "end":
         end_screen()
         
     pygame.display.flip()
