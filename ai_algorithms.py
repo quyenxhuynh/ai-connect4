@@ -72,86 +72,12 @@ class GameState:
     def get_score(self):  # will write this
         # heuristic is based on the number of twos and threes in a row (for the computer)
         # could implement different heuristics as part of report
-
-        ai_twos = 0  # num of two-in-a-rows
-        ai_threes = 0  # num of three-in-a-rows
-        player_twos = 0
-        player_threes = 0
-
-        for col in range(self.COLS):
-            ai_score = 0
-            player_score = 0
-            for row in range(self.ROWS):
-                if self.board[row][col] == 1:
-                    ai_score += 1
-                    if ai_score == 2:
-                        ai_twos += 1
-                    if ai_score == 3:
-                        ai_threes += 1
-                else:
-                    ai_score = 0
-                if self.board[row][col] == 0:
-                    player_score += 1
-                    if player_score == 2:
-                        player_twos += 1
-                    if player_score == 3:
-                        player_threes += 1
-                else:
-                    player_score = 0
-
-        for row in range(self.ROWS):
-            ai_score = 0
-            player_score = 0
-            for col in range(self.COLS):
-                if self.board[row][col] == 1:
-                    ai_score += 1
-                    if ai_score == 2:
-                        ai_twos += 1
-                    if ai_score == 3:
-                        ai_threes += 1
-                else:
-                    ai_score = 0
-                if self.board[row][col] == 0:
-                    player_score += 1
-                    if player_score == 2:
-                        player_twos += 1
-                    if player_score == 3:
-                        player_threes += 1
-                else:
-                    player_score = 0
-
-        # diagonal /
-        for col in range(self.COLS - (self.TO_WIN - 1)):
-            for row in range(self.ROWS - (self.TO_WIN - 1)):
-                if self.board[row][col] == 1 and self.board[row + 1][col + 1] == 1 and self.board[row + 2][col + 2] == 1:
-                    ai_threes += 1
-                elif self.board[row][col] == 1 and self.board[row + 1][col + 1] == 1:
-                    ai_twos += 1
-                if self.board[row][col] == 0 and self.board[row + 1][col + 1] == 0 and self.board[row + 2][col + 2] == 0:
-                    player_threes += 1
-                elif self.board[row][col] == 0 and self.board[row + 1][col + 1] == 0:
-                    player_twos += 1
-
-        # diagonal \
-        for col in range(self.COLS - (self.TO_WIN - 1)):
-            for row in range(self.TO_WIN - 1, self.ROWS):
-                if self.board[row][col] == 1 and self.board[row - 1][col + 1] == 1 and self.board[row - 2][col + 2] == 1:
-                    ai_threes += 1
-                if self.board[row][col] == 1 and self.board[row - 1][col + 1] == 1:
-                    ai_twos += 1
-                if self.board[row][col] == 0 and self.board[row - 1][col + 1] == 0 and self.board[row - 2][col + 2] == 0:
-                    player_threes += 1
-                if self.board[row][col] == 0 and self.board[row - 1][col + 1] == 0:
-                    player_twos += 1
-
-        return ((3 * ai_threes) + ai_twos) - ((3 * player_threes) + player_twos)
+        return 1
 
 
 def minimax(game):
     game_state = GameState(game)
-    result = max_value(game_state, 0, 4)
-    print(result)
-    return result[0]
+    return max_value(game_state, 0, 5)
 
 
 def max_value(game_state, num_moves, max_depth):
@@ -201,10 +127,8 @@ def min_value(game_state, num_moves, max_depth):
             move = successor
     return [move, cur_min]
 
-#
-# import game
-# testgame = game.ConnectFour()
-# gamestate = GameState(testgame)
-# print(minimax(gamestate))
 
-
+import game
+testgame = game.ConnectFour()
+gamestate = GameState(testgame)
+print(minimax(gamestate))

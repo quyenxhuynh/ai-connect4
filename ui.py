@@ -1,5 +1,5 @@
 import pygame
-import game
+import connect4 as game
 
 pygame.init()
 clock = pygame.time.Clock()
