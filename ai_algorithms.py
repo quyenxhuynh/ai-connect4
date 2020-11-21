@@ -147,12 +147,12 @@ class GameState:
 
 def minimax(game):
     game_state = GameState(game)
-    result = max_value(game_state, 0, 4)
+    result = max_value(game_state, 0, 5, -9999999, 99999999)
     print(result)
     return result[0]
 
 
-def max_value(game_state, num_moves, max_depth):
+def max_value(game_state, num_moves, max_depth, alpha, beta):
     if game_state.is_win(1):
         return [None, 100]  # computer wins
     elif game_state.is_win(0):
@@ -170,14 +170,17 @@ def max_value(game_state, num_moves, max_depth):
         col = successor[1]
         new_game_state = GameState(game_state)
         new_game_state.board[row][col] = 1  # computer move
-        new_max = min_value(new_game_state, num_moves + 1, max_depth)[1]
+        new_max = min_value(new_game_state, num_moves + 1, max_depth, alpha, beta)[1]
         if new_max >= cur_max:
             cur_max = new_max
             move = successor
+        if cur_max > beta:
+            return [move, cur_max]
+        alpha = max(alpha, cur_max)
     return [move, cur_max]
 
 
-def min_value(game_state, num_moves, max_depth):
+def min_value(game_state, num_moves, max_depth, alpha, beta):
     if game_state.is_win(1):
         return [None, 100]  # computer wins
     elif game_state.is_win(0):
@@ -193,16 +196,19 @@ def min_value(game_state, num_moves, max_depth):
         col = successor[1]
         new_game_state = GameState(game_state)
         new_game_state.board[row][col] = 0  # player move
-        new_min = max_value(new_game_state, num_moves + 1, max_depth)[1]
+        new_min = max_value(new_game_state, num_moves + 1, max_depth, alpha, beta)[1]
         if new_min <= cur_min:
             cur_min = new_min
             move = successor
+        if cur_min < alpha:
+            return [move, cur_min]
+        beta = min(beta, cur_min)
     return [move, cur_min]
 
 
 def expectimax(game):
     game_state = GameState(game)
-    result = e_max_value(game_state, 0, 4)
+    result = e_max_value(game_state, 0, 5)
     print(result)
     return result[0]
 
@@ -250,7 +256,7 @@ def e_min_value(game_state, num_moves, max_depth):
         col = successor[1]
         new_game_state = GameState(game_state)
         new_game_state.board[row][col] = 0  # player move
-        value = max_value(new_game_state, num_moves + 1, max_depth)[1]
+        value = e_max_value(new_game_state, num_moves + 1, max_depth)[1]
         total_value += value
     final_value = total_value/len(successors)
     return [move, final_value]
