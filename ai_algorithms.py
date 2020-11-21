@@ -243,14 +243,14 @@ def e_min_value(game_state, num_moves, max_depth):
         return [None, game_state.get_score()]
 
     move = None
+    total_value = 0
     successors = game_state.get_successors()
-    values = []
     for successor in successors:
         row = successor[0]
         col = successor[1]
         new_game_state = GameState(game_state)
         new_game_state.board[row][col] = 0  # player move
-        values.append(max_value(new_game_state, num_moves + 1, max_depth)[1])
-    values.sort()
-    final_value = (values[0] + values[1] + values[2])/3
+        value = max_value(new_game_state, num_moves + 1, max_depth)[1]
+        total_value += value
+    final_value = total_value/len(successors)
     return [move, final_value]
