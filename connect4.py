@@ -1,6 +1,6 @@
 class ConnectFour:
     def __init__(self, rows=5, cols=6, to_win=4):
-        self.turn = 0
+        self.turn = 1
         self.ROWS = rows
         self.COLS = cols
         self.PLAYERS = 2
@@ -12,7 +12,7 @@ class ConnectFour:
 
     def reset(self):
         self.board = [[None for i in range(self.COLS)] for j in range(self.ROWS)] 
-        self.turn = 0
+        self.turn = 1
         self.winner = None
         # print(self.board) 
     

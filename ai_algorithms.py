@@ -2,7 +2,7 @@ class GameState:
 
     def __init__(self, game):
         self.board = [row[:] for row in game.board]  # make a deep copy of the game board
-        self.turn = 0
+        self.turn = 1
         self.ROWS = game.ROWS
         self.COLS = game.COLS
         self.PLAYERS = 2
