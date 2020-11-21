@@ -104,7 +104,6 @@ def medium():
 
     if game.winner is not None:
         game_mode = "end"
-        running = False
         print(game)
     elif game.turn == 1:
         game_state = ai_algorithms.GameState(game)
@@ -138,7 +137,6 @@ def hard():
 
     if game.winner is not None:
         game_mode = "end"
-        running = False
         print(game)
     elif game.turn == 1:
         game_state = ai_algorithms.GameState(game)
