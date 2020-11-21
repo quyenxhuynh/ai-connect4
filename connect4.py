@@ -38,10 +38,10 @@ class ConnectFour:
             self.board[row][col] = self.turn
             win = self.is_win(col, row, self.turn)
             print(self)
-            if self.is_win(col, row, self.turn):
+            if win:
                 print(f'Player {self.turn} won!')
                 return
-            elif win == 2:
+            elif self.is_tie():
                 print(f'It was a tie.')
             else: 
                 self.turn = (self.turn + 1) % self.PLAYERS
@@ -59,24 +59,40 @@ class ConnectFour:
             c += 1
             if c == self.TO_WIN:
                 self.winner = player
+                print("vertical")
                 return True
 
         # horizontal
-        c = 0
-        for i in range(min(0, col-self.TO_WIN), min(col+self.TO_WIN, self.COLS)):
-            if self.board[row][i] == player:
-                c += 1
-                if c == self.TO_WIN:
-                    self.winner = player
-                    return True
-            else:
-                c = 0
+        for row in range(self.ROWS):
+            c = 0
+            for col in range(self.COLS):
+                if self.board[row][col] == player:
+                    c += 1
+                    if c == self.TO_WIN:
+                        self.winner = player
+                        print("horizontal")
+                        return True
+                else:
+                    c = 0
+        # c = 0
+        # for i in range(min(0, col-self.TO_WIN), min(col+self.TO_WIN, self.COLS)):
+        #     if self.board[row][i] == player:
+        #         c += 1
+        #         if c == self.TO_WIN:
+        #             self.winner = player
+        #             print("horizontal")
+        #
+        #             return True
+        #     else:
+        #         c = 0
 
         # positive diagonal
         for col in range(self.COLS - (self.TO_WIN - 1)):
             for row in range(self.ROWS - (self.TO_WIN - 1)):
                 if self.board[row][col] == player and self.board[row + 1][col + 1] == player and self.board[row + 2][col + 2] == player and self.board[row + 3][col + 3] == player:
                     self.winner = player
+                    print("positive diagonal")
+
                     return True
                 else:
                     c = 0
@@ -86,19 +102,18 @@ class ConnectFour:
             for row in range(self.TO_WIN - 1, self.ROWS):
                 if self.board[row][col] == player and self.board[row - 1][col + 1] == player and self.board[row - 2][col + 2] == player and self.board[row - 3][col + 3] == player:
                     self.winner = player
+                    print("negative diagonal")
+
                     return True
                 else:
                     c = 0
-        
-        if self.is_tie():
-            self.winner = 2
-            return True
         
     def is_tie(self):
         for i in range(self.ROWS):
             for j in range(self.COLS):
                 if self.board[i][j] is None:
                     return False
+        self.winner = 2
         return True
 
     def next_valid(self, col):
