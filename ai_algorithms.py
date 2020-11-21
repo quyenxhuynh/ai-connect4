@@ -208,7 +208,7 @@ def min_value(game_state, num_moves, max_depth, alpha, beta):
 
 def expectimax(game):
     game_state = GameState(game)
-    result = e_max_value(game_state, 0, 5)
+    result = e_max_value(game_state, 0, 4)
     print(result)
     return result[0]
 
