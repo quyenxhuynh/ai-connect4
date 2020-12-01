@@ -1,6 +1,6 @@
 class GameState:
 
-    def __init__(self, game):
+    def __init__(self, game, DANGERFACTOR = 0):
         self.board = [row[:] for row in game.board]  # make a deep copy of the game board
         self.turn = 1
         self.ROWS = game.ROWS
@@ -8,6 +8,7 @@ class GameState:
         self.PLAYERS = 2
         self.winner = None
         self.TO_WIN = game.TO_WIN
+        self.DANGERFACTOR = DANGERFACTOR
 
     # I changed this is_win function so that it didn't rely on a specific row/column
     def is_win(self, player):
@@ -68,6 +69,171 @@ class GameState:
             if row is not None:
                 successor_list.append((row, col))
         return successor_list
+
+    def dangerous_good_h(self, DANGERFACTOR):
+        ai_slots = 0
+        human_slots = 0
+        empty_slots_col = 0
+        empty_slots_row = 0
+        empty_slots_posdiag = 0
+        empty_slots_negdiag = 0
+
+        max_allowable_perc = 0.3
+        DANGERFACTOR = DANGERFACTOR
+
+        # col
+        for col in range(self.COLS):
+            for row in range(self.ROWS):
+                if self.board[row][col] == 1:
+                    ai_slots += 1
+
+                    if human_slots/4 >= max_allowable_perc:
+                        perc_won = human_slots/4
+                        dangerousforai_col = perc_won * (DANGERFACTOR/max_allowable_perc)
+                        DANGERFACTOR += dangerousforai_col
+
+                elif self.board[row][col] == 0:
+                    human_slots += 1
+
+                    if ai_slots / 84 >= max_allowable_perc:
+                        perc_won = ai_slots / 4
+                        dangerousforh_col = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforh_col
+                else:
+                    empty_slots_col += 1
+
+
+        # row
+        for row in range(self.ROWS):
+            for col in range(self.COLS):
+                if self.board[row][col] == 1:
+                    ai_slots += 1
+
+                    if human_slots /4 >= max_allowable_perc:
+                        perc_won = human_slots / 4
+                        dangerousforai_row = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforai_row
+
+                elif self.board[row][col] == 0:
+                    human_slots += 1
+
+                    if ai_slots /4 >= max_allowable_perc:
+                        perc_won = ai_slots / 4
+                        dangerousforh_row = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforh_row
+
+                else:
+                    empty_slots_row += 1
+
+        # diagonal /
+        for col in range(self.COLS - (self.TO_WIN - 1)):
+            for row in range(self.ROWS - (self.TO_WIN - 1)):
+                if self.board[row][col] == 1:
+                    ai_slots += 1
+
+                    if human_slots /4 >= max_allowable_perc:
+                        perc_won = human_slots / 4
+                        dangerousforai_posdiag = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        self.DANGERFACTOR += dangerousforai_posdiag
+
+                if self.board[row + 1][col + 1] == 1:
+                    ai_slots += 1
+
+                    if human_slots /4 >= max_allowable_perc:
+                        perc_won = human_slots / 4
+                        dangerousforai_posdiag = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforai_posdiag
+
+                if self.board[row + 2][col + 2] == 1:
+                    ai_slots += 1
+
+                    if human_slots /4 >= max_allowable_perc:
+                        perc_won = human_slots / 4
+                        dangerousforai_posdiag = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforai_posdiag
+
+                if self.board[row][col] == 0:
+                    human_slots += 1
+
+                    if ai_slots /4 >= max_allowable_perc:
+                        perc_won = ai_slots / 4
+                        dangerousforh_posdiag = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforh_posdiag
+
+                if self.board[row + 1][col + 1] == 0:
+                    human_slots += 1
+
+                    if ai_slots /4 >= max_allowable_perc:
+                        perc_won = ai_slots / 4
+                        dangerousforh_posdiag = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforh_posdiag
+
+                if self.board[row + 2][col + 2] == 0:
+                    human_slots += 1
+
+                    if ai_slots /4 >= max_allowable_perc:
+                        perc_won = ai_slots / 4
+                        dangerousforh_posdiag = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforh_posdiag
+
+                else:
+                    empty_slots_posdiag += 1
+
+        # diagonal \
+        for col in range(self.COLS - (self.TO_WIN - 1)):
+            for row in range(self.TO_WIN - 1, self.ROWS):
+                if self.board[row][col] == 1:
+                    ai_slots += 1
+
+                    if human_slots /4 >= max_allowable_perc:
+                        perc_won = human_slots / 4
+                        dangerousforai_negdiag = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforai_negdiag
+                if self.board[row - 1][col + 1] == 1:
+                    ai_slots += 1
+
+                    if human_slots /4 >= max_allowable_perc:
+                        perc_won = human_slots / 4
+                        dangerousforai_negdiag = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforai_negdiag
+
+                if self.board[row - 2][col + 2] == 1:
+                    ai_slots += 1
+
+                    if human_slots /4 >= max_allowable_perc:
+                        perc_won = human_slots / 4
+                        dangerousforai_negdiag = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforai_negdiag
+
+
+                if self.board[row][col] == 0:
+                    human_slots += 1
+
+                    if ai_slots /4 >= max_allowable_perc:
+                        perc_won = ai_slots / 4
+                        dangerousforh_negdiag = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforh_negdiag
+
+                if self.board[row - 1][col + 1] == 0:
+                    human_slots += 1
+
+                    if ai_slots /4 >= max_allowable_perc:
+                        perc_won = ai_slots / 4
+                        dangerousforh_negdiag = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforh_negdiag
+
+                if self.board[row - 2][col + 2] == 0:
+                    human_slots += 1
+
+                    if ai_slots /4 >= max_allowable_perc:
+                        perc_won = ai_slots / 4
+                        dangerousforh_negdiag = perc_won * (DANGERFACTOR / max_allowable_perc)
+                        DANGERFACTOR += dangerousforh_negdiag
+
+                else:
+                    empty_slots_negdiag += 1
+
+        return -1 * (self.DANGERFACTOR/100)
 
     def get_score(self):
 
@@ -147,12 +313,12 @@ class GameState:
 
 def minimax(game):
     game_state = GameState(game)
-    result = max_value(game_state, 0, 5, -9999999, 99999999)
+    result = max_value(game_state, 0, 5, -9999999, 99999999, 0)
     print(result)
     return result[0]
 
 
-def max_value(game_state, num_moves, max_depth, alpha, beta):
+def max_value(game_state, num_moves, max_depth, alpha, beta,DANGERFACTOR):
     if game_state.is_win(1):
         return [None, 100]  # computer wins
     elif game_state.is_win(0):
@@ -160,7 +326,7 @@ def max_value(game_state, num_moves, max_depth, alpha, beta):
     elif game_state.is_tie():
         return [None, 0]  # not sure what score for tie should be
     elif num_moves > max_depth:
-        return [None, game_state.get_score()]
+        return [None, game_state.dangerous_good_h(DANGERFACTOR)]
     cur_max = -999999999
     move = None
     # print(game_state.board)
@@ -170,7 +336,7 @@ def max_value(game_state, num_moves, max_depth, alpha, beta):
         col = successor[1]
         new_game_state = GameState(game_state)
         new_game_state.board[row][col] = 1  # computer move
-        new_max = min_value(new_game_state, num_moves + 1, max_depth, alpha, beta)[1]
+        new_max = min_value(new_game_state, num_moves + 1, max_depth, alpha, beta, DANGERFACTOR)[1]
         if new_max >= cur_max:
             cur_max = new_max
             move = successor
@@ -180,7 +346,7 @@ def max_value(game_state, num_moves, max_depth, alpha, beta):
     return [move, cur_max]
 
 
-def min_value(game_state, num_moves, max_depth, alpha, beta):
+def min_value(game_state, num_moves, max_depth, alpha, beta, DANGERFACTOR):
     if game_state.is_win(1):
         return [None, 100]  # computer wins
     elif game_state.is_win(0):
@@ -188,7 +354,7 @@ def min_value(game_state, num_moves, max_depth, alpha, beta):
     elif game_state.is_tie():
         return [None, 0]  # not sure what score for tie should be
     elif num_moves > max_depth:
-        return [None, game_state.get_score()]
+        return [None, game_state.dangerous_good_h(DANGERFACTOR)]
     cur_min = 999999999
     move = None
     for successor in game_state.get_successors():
@@ -196,7 +362,7 @@ def min_value(game_state, num_moves, max_depth, alpha, beta):
         col = successor[1]
         new_game_state = GameState(game_state)
         new_game_state.board[row][col] = 0  # player move
-        new_min = max_value(new_game_state, num_moves + 1, max_depth, alpha, beta)[1]
+        new_min = max_value(new_game_state, num_moves + 1, max_depth, alpha, beta, DANGERFACTOR)[1]
         if new_min <= cur_min:
             cur_min = new_min
             move = successor
