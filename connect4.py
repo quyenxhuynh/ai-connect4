@@ -1,5 +1,5 @@
 class ConnectFour:
-    def __init__(self, rows=5, cols=6, to_win=4):
+    def __init__(self, rows=5, cols=6, to_win=4, DANGERFACTOR = 0):
         self.turn = 1
         self.ROWS = rows
         self.COLS = cols
@@ -7,6 +7,7 @@ class ConnectFour:
         self.TO_WIN = to_win
         self.winner = None
         self.board = None
+        self.DANGERFACTOR = DANGERFACTOR
         self.reset()
         # self.test()
 

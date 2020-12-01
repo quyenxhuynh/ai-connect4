@@ -316,12 +316,8 @@ class GameState:
 
 def minimax(game):
     game_state = GameState(game)
-<<<<<<< HEAD
     result = max_value(game_state, 0, 5, -9999999, 99999999, 0)
-=======
-    result = max_value(game_state, 0, 5, -9999999, 99999999)
     print("RESULTS MINIMAX")
->>>>>>> aa2fb27674eac35940f4a80cfc705408d25e678b
     print(result)
     return result[0]
 
