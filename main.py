@@ -174,19 +174,20 @@ def levels():
             running = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if easy_rect.collidepoint(event.pos):
-                settings['mode'] = 'easy'
-            elif med_rect.collidepoint(event.pos):
-                settings['mode'] = 'medium'
-            elif hard_rect.collidepoint(event.pos):
-                settings['mode'] = 'hard'
-            elif start_rect.collidepoint(event.pos):
-                if settings['mode'] == 'easy':
-                    game_mode = 'easy'
-                elif settings['mode'] == 'medium':
-                    game_mode = 'medium'
-                elif settings['mode'] == 'hard':
-                    game_mode = 'hard'
+            if event.button == 1:
+                if easy_rect.collidepoint(event.pos):
+                    settings['mode'] = 'easy'
+                elif med_rect.collidepoint(event.pos):
+                    settings['mode'] = 'medium'
+                elif hard_rect.collidepoint(event.pos):
+                    settings['mode'] = 'hard'
+                elif start_rect.collidepoint(event.pos):
+                    if settings['mode'] == 'easy':
+                        game_mode = 'easy'
+                    elif settings['mode'] == 'medium':
+                        game_mode = 'medium'
+                    elif settings['mode'] == 'hard':
+                        game_mode = 'hard'
 
 def draw_board():
     screen.fill(WHITE)
@@ -216,6 +217,10 @@ def easy():
     draw_board()
 
     for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                game_mode = "intro"
+                game.reset()
         if event.type == pygame.QUIT:
             running = False
         
@@ -229,12 +234,13 @@ def easy():
 
         else: 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                col = (event.pos[0] - settings['gap']) // settings['SQ'] 
-                row = game.make_move(col)
-                
-                if row:
-                    draw_board()
-                    pygame.display.update()
+                if event.button == 1:
+                    col = (event.pos[0] - settings['gap']) // settings['SQ'] 
+                    row = game.make_move(col)
+                    
+                    if row:
+                        draw_board()
+                        pygame.display.update()
 
 def medium():
     global game_mode, running
@@ -245,15 +251,20 @@ def medium():
     draw_board()
 
     for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                game_mode = "intro"
+                game.reset()
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            col = (event.pos[0] - settings['gap']) // settings['SQ']  
-            row = game.make_move(col)
+            if event.button == 1:
+                col = (event.pos[0] - settings['gap']) // settings['SQ']  
+                row = game.make_move(col)
 
-            if row:
-                draw_board()
-                pygame.display.update()
+                if row:
+                    draw_board()
+                    pygame.display.update()
 
     if game.winner is not None:
         game_mode = "end"
@@ -275,15 +286,20 @@ def hard():
     draw_board()
 
     for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                game_mode = "intro"
+                game.reset()
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            col = (event.pos[0] - settings['gap']) // settings['SQ']  
-            row = game.make_move(col)
+            if event.button == 1:
+                col = (event.pos[0] - settings['gap']) // settings['SQ']  
+                row = game.make_move(col)
 
-            if row:
-                draw_board()
-                pygame.display.update()
+                if row:
+                    draw_board()
+                    pygame.display.update()
 
     if game.winner is not None:
         game_mode = "end"
@@ -305,6 +321,10 @@ def two_players():
     draw_board()
 
     for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                game_mode = "intro"
+                game.reset()
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:

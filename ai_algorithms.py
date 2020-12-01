@@ -75,11 +75,14 @@ class GameState:
         ai_threes = 0  # num of three-in-a-rows
         player_twos = 0
         player_threes = 0
-
+        
         for col in range(self.COLS):
             ai_score = 0
             player_score = 0
             for row in range(self.ROWS):
+                middle = self.COLS//2
+                if self.board[row][middle] == 1 and ai_score == 0:
+                    ai_score += 1
                 if self.board[row][col] == 1:
                     ai_score += 1
                     if ai_score == 2:
@@ -148,6 +151,7 @@ class GameState:
 def minimax(game):
     game_state = GameState(game)
     result = max_value(game_state, 0, 5, -9999999, 99999999)
+    print("RESULTS MINIMAX")
     print(result)
     return result[0]
 
@@ -209,6 +213,7 @@ def min_value(game_state, num_moves, max_depth, alpha, beta):
 def expectimax(game):
     game_state = GameState(game)
     result = e_max_value(game_state, 0, 4)
+    print("RESULTS E MAX")
     print(result)
     return result[0]
 
