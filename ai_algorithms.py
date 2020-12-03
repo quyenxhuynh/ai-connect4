@@ -70,7 +70,7 @@ class GameState:
                 successor_list.append((row, col))
         return successor_list
 
-    def dangerous_good_h(self, DANGERFACTOR):
+    def dangerous_h(self, DANGERFACTOR):
         ai_slots = 0
         human_slots = 0
         empty_slots_col = 0
@@ -205,7 +205,6 @@ class GameState:
                         dangerousforai_negdiag = perc_won * (DANGERFACTOR / max_allowable_perc)
                         DANGERFACTOR += dangerousforai_negdiag
 
-
                 if self.board[row][col] == 0:
                     human_slots += 1
 
@@ -233,7 +232,7 @@ class GameState:
                 else:
                     empty_slots_negdiag += 1
 
-        return -1 * (self.DANGERFACTOR/100)
+        return -1 * 3 * (self.DANGERFACTOR/100) + 2 * (self.get_score()/100)
 
     def get_score(self):
 
@@ -330,7 +329,7 @@ def max_value(game_state, num_moves, max_depth, alpha, beta,DANGERFACTOR):
     elif game_state.is_tie():
         return [None, 0]  # not sure what score for tie should be
     elif num_moves > max_depth:
-        return [None, game_state.dangerous_good_h(DANGERFACTOR)]
+        return [None, game_state.dangerous_h(DANGERFACTOR)]
     cur_max = -999999999
     move = None
     # print(game_state.board)
@@ -358,7 +357,7 @@ def min_value(game_state, num_moves, max_depth, alpha, beta, DANGERFACTOR):
     elif game_state.is_tie():
         return [None, 0]  # not sure what score for tie should be
     elif num_moves > max_depth:
-        return [None, game_state.dangerous_good_h(DANGERFACTOR)]
+        return [None, game_state.dangerous_h(DANGERFACTOR)]
     cur_min = 999999999
     move = None
     for successor in game_state.get_successors():
